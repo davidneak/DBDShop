@@ -25,13 +25,10 @@ namespace DBDShopLib
 
         public void InsertTestData()
         {
-            string query = "CREATE TABLE IF NOT EXISTS Products (Id int,Name TEXT)";
+            string query = "INSERT INTO Producto VALUES(1,'Nocilla',50);";
             MySqlCommand cmd = new MySqlCommand(query, m_connection);
             cmd.ExecuteNonQuery();
-            query = "INSERT INTO Products VALUES(1,'Nocilla');";
-            cmd = new MySqlCommand(query, m_connection);
-            cmd.ExecuteNonQuery();
-            query = "INSERT INTO Products VALUES(2,'Patata');";
+            query = "INSERT INTO Producto VALUES(2,'Patata',30);";
             cmd = new MySqlCommand(query, m_connection);
             cmd.ExecuteNonQuery();
         }
@@ -40,17 +37,21 @@ namespace DBDShopLib
         {
             List<Product> products = new List<Product>();
 
-            string query = "SELECT Id,Name FROM Products";
+            string query = "SELECT * FROM Producto";
             MySqlCommand cmd = new MySqlCommand(query, m_connection);
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 
                 int id= int.Parse(reader.GetValue(0).ToString());
-                string name = reader.GetValue(1).ToString();
-                Product product = new Product();
-                product.Id = id;
-                product.Name = name;
+                string description = reader.GetValue(1).ToString();
+                int stock = int.Parse(reader.GetValue(2).ToString());
+                Product product = new Product(id,description,stock);
+                /*
+                product.idproducto = id;
+                product.descripcion = name;
+                product.stock = stock;
+                */
                 products.Add(product);
             }
             reader.Close();
