@@ -25,19 +25,19 @@ namespace DBDShopLib
 
         public void InsertTestData()
         {
-            string query = "INSERT INTO Producto VALUES(1,'Nocilla',50);";
+            string query = "INSERT INTO producto VALUES(1,'Nocilla',50);";
             MySqlCommand cmd = new MySqlCommand(query, m_connection);
             cmd.ExecuteNonQuery();
-            query = "INSERT INTO Producto VALUES(2,'Patata',30);";
+            query = "INSERT INTO producto VALUES(2,'Patata',30);";
             cmd = new MySqlCommand(query, m_connection);
             cmd.ExecuteNonQuery();
         }
-
-        public List<Product> GetProducts()
+        
+        public List<Producto> GetProducts()
         {
-            List<Product> products = new List<Product>();
+            List<Producto> products = new List<Producto>();
 
-            string query = "SELECT * FROM Producto";
+            string query = "SELECT * FROM producto";
             MySqlCommand cmd = new MySqlCommand(query, m_connection);
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -46,23 +46,25 @@ namespace DBDShopLib
                 int id= int.Parse(reader.GetValue(0).ToString());
                 string description = reader.GetValue(1).ToString();
                 int stock = int.Parse(reader.GetValue(2).ToString());
-                Product product = new Product(id,description,stock);
-                /*
-                product.idproducto = id;
-                product.descripcion = name;
-                product.stock = stock;
-                */
+                Producto product = new Producto(id,description,stock);
                 products.Add(product);
             }
             reader.Close();
             return products;
         }
-
-        public void DeleteProducts(List<Product> products)
+        public void insertProduct(int id, string descripcion, int stock)
         {
-            foreach(Product product in products)
+            string query = "INSERT INTO producto VALUES("+id;
+            MySqlCommand cmd = new MySqlCommand(query, m_connection);
+            cmd.ExecuteNonQuery();
+            
+        }
+
+        public void DeleteProducts(List<Producto> products)
+        {
+            foreach(Producto product in products)
             {
-                string query = "DELETE FROM Products WHERE Id =" + product.idproducto + ";";
+                string query = "DELETE FROM producto WHERE Id =" + product.idproducto + ";";
                 MySqlCommand cmd = new MySqlCommand(query, m_connection);
                 cmd.ExecuteNonQuery();
             }

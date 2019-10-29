@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace DBDShopLib
 {
-    public class Product
+    public class Producto
     {
         public int idproducto = 0;
         public string descripcion = null;
         public int stock = 0;
-        public Product(int id, string descripcion, int stock)
+
+        public Producto(int id, string descripcion, int stock)
         {
             this.idproducto = id;
             this.descripcion = descripcion;
