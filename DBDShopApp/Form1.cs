@@ -19,7 +19,6 @@ namespace DBDShopApp
 
             m_client = new Client("NW0HSO5HO7", "NW0HSO5HO7", "ZEALzol3dN");
             textBox1.Text = "Connected to database";
-            
         }
 
         Client m_client;
