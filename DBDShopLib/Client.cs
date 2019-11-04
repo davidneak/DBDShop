@@ -52,6 +52,19 @@ namespace DBDShopLib
             reader.Close();
             return products;
         }
+        public List<Producto> GetOutOfStockProducts()
+        {
+            List<Producto> products = GetProducts();
+            List<Producto> outOfStock = new List<Producto>();
+            foreach(Producto product in products)
+            {
+                if(product.stock == 0)
+                {
+                    outOfStock.Add(product);
+                }
+            }
+            return outOfStock;
+        }
         public void insertProduct(int id, string descripcion, int stock)
         {
             string query = "INSERT INTO producto VALUES(@id, @descripcion, @stock)";
