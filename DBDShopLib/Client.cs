@@ -74,9 +74,45 @@ namespace DBDShopLib
             cmd.Parameters.AddWithValue("@stock", stock);
             cmd.ExecuteNonQuery();
 
-            
-            
+        }
+        public void buyProduct(int ammount)
+        {
 
+        }
+        public void sellProduct(int ammount)
+        {
+
+        }
+        public List<Producto> getPurchases()
+        {
+            return new List<Producto>();
+        }
+
+        public List<Sale> GetSales()
+        {
+            int prod = 0;
+            int pedido = 0;
+            int cantidad = 0;
+            double precio = 0;
+            string fecha = "";
+            string cliente = "";
+            List<Sale> sales = new List<Sale>();
+
+            string query = "SELECT * FROM producto_pedido INNER JOIN (SELECT * FROM pedido INNER JOIN pedido_ciente ON pedido.idpedido = pedido_cliente.codpedido) ON producto_pedido.pedido = idpedido;";
+            MySqlCommand cmd = new MySqlCommand(query, m_connection);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                prod = int.Parse(reader.GetValue(0).ToString());
+                pedido = int.Parse(reader.GetValue(1).ToString());
+                cantidad = int.Parse(reader.GetValue(2).ToString());
+                precio = double.Parse(reader.GetValue(3).ToString());
+                Sale sale = new Sale(prod,pedido,cantidad,precio);
+                sales.Add(sale);
+            }
+            reader.Close();
+
+            return sales;
         }
 
         public void DeleteProducts(List<Producto> products)
@@ -88,5 +124,7 @@ namespace DBDShopLib
                 cmd.ExecuteNonQuery();
             }
         }
+
+
     }
 }
