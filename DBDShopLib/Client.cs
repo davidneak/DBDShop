@@ -75,16 +75,53 @@ namespace DBDShopLib
             cmd.ExecuteNonQuery();
 
         }
-        public void buyProduct(int ammount)
+        
+        public void buyProduct(int product,int ammount, string source)
         {
-
+            string query = "INSERT INTO compras VALUES(SELECT precio from producto_distribuidor WHERE codproducto = "+ product + "AND iddistribuidor = " + source + ",NOW()," + product + "," + ammount +");";
+            MySqlCommand cmd = new MySqlCommand(query, m_connection);
+            cmd.ExecuteNonQuery();
+            query = "UPDATE producto SET stock = stock + " + ammount + " WHERE idproducto = " + product +");";
+            cmd = new MySqlCommand(query, m_connection);
+            cmd.ExecuteNonQuery();
         }
-        public void sellProduct(int ammount)
+        public void sellProduct(int product, int ammount, string buyer)
         {
-
+            int enStock = 0;
+            string query = "SELECT stock FROM producto WHERE idproducto = "+ product +";";
+            MySqlCommand cmd = new MySqlCommand(query, m_connection);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                enStock = int.Parse(reader.GetValue(0).ToString());
+            }
+            reader.Close();
+            if (enStock >= ammount)
+            {
+                query = "UPDATE producto SET stock = stock - " + ammount + " WHERE idproducto = " + product + ");";
+                cmd = new MySqlCommand(query, m_connection);
+                cmd.ExecuteNonQuery();
+            }
         }
         public List<Producto> getPurchases()
         {
+            //WIP
+            int precio = 0;
+            string fecha = "";
+            int producto = 0;
+            int cantidad = 0;
+            string query = "SELECT * FROM compras;";
+            MySqlCommand cmd = new MySqlCommand(query, m_connection);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+               precio = int.Parse(reader.GetValue(0).ToString());
+               fecha = reader.GetValue(1).ToString();
+               producto = int.Parse(reader.GetValue(2).ToString());
+               cantidad = int.Parse(reader.GetValue(3).ToString());
+               
+            }
+            reader.Close();
             return new List<Producto>();
         }
 
@@ -98,15 +135,17 @@ namespace DBDShopLib
             string cliente = "";
             List<Sale> sales = new List<Sale>();
 
-            string query = "SELECT * FROM producto_pedido INNER JOIN (SELECT * FROM pedido INNER JOIN pedido_ciente ON pedido.idpedido = pedido_cliente.codpedido) ON producto_pedido.pedido = idpedido;";
+            string query = "SELECT pedido,producto,cantidad,precio,fecha,idcliente FROM NW0HSO5HO7.producto_pedido INNER JOIN (SELECT * FROM pedido INNER JOIN pedido_cliente ON pedido.idpedido = pedido_cliente.codpedido) AS T ON producto_pedido.pedido = idpedido;";
             MySqlCommand cmd = new MySqlCommand(query, m_connection);
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                prod = int.Parse(reader.GetValue(0).ToString());
-                pedido = int.Parse(reader.GetValue(1).ToString());
+                pedido = int.Parse(reader.GetValue(0).ToString());
+                prod = int.Parse(reader.GetValue(1).ToString());
                 cantidad = int.Parse(reader.GetValue(2).ToString());
                 precio = double.Parse(reader.GetValue(3).ToString());
+                fecha = reader.GetValue(4).ToString();
+                cliente = reader.GetValue(5).ToString();
                 Sale sale = new Sale(prod,pedido,cantidad,precio);
                 sales.Add(sale);
             }
