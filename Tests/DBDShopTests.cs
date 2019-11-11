@@ -14,7 +14,7 @@ namespace Tests
             //Connect to the test database
             Client client= new Client("NW0HSO5HO7", "NW0HSO5HO7", "ZEALzol3dN");
             //Get all the existing products
-            List<Producto> products = client.GetProducts();
+            List<Product> products = client.GetProducts();
             //Delete all the products
             client.DeleteProducts(products);
             //Check we deleted all the products
