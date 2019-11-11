@@ -73,10 +73,6 @@ namespace DBDShopLib
             cmd.Parameters.AddWithValue("@descripcion", descripcion);
             cmd.Parameters.AddWithValue("@stock", stock);
             cmd.ExecuteNonQuery();
-
-            
-            
-
         }
 
         public void DeleteProducts(List<Producto> products)
@@ -87,6 +83,13 @@ namespace DBDShopLib
                 MySqlCommand cmd = new MySqlCommand(query, m_connection);
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        public void modificarPrecio(double precio, int id)
+        {
+            string query = " update producto_pedido set precio = " + precio + " where producto = " + id + ";";
+            MySqlCommand cmd = new MySqlCommand(query, m_connection);
+            cmd.ExecuteNonQuery();
         }
     }
 }

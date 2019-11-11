@@ -20,12 +20,12 @@ namespace DBDShopApp.Properties
             InitializeComponent();
 
             c = new Client("NW0HSO5HO7", "NW0HSO5HO7", "ZEALzol3dN");
-            textBox1.Text = "Connected to database";
+            textBox1.Text = "Escribir parametros";
         }
 
         private void Form3_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -35,6 +35,29 @@ namespace DBDShopApp.Properties
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+
+            string precio = "", id = "";
+       
+            int i = 0;
+
+            while (i < textBox1.Text.Length)
+            {
+                if(char.IsDigit(textBox1.Text[i]))
+                    precio += textBox1.Text[i];
+               
+
+            }
+
+              
+
+
+
+
+            double p = double.Parse(precio);
+           // int cod = int.Parse(id);
+
+            c.modificarPrecio(p, cod);
 
         }
     }
