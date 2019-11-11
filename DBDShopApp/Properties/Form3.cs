@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBDShopLib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,14 @@ namespace DBDShopApp.Properties
 {
     public partial class Form3 : Form
     {
+        Client c;
+
         public Form3()
         {
             InitializeComponent();
+
+            c = new Client("NW0HSO5HO7", "NW0HSO5HO7", "ZEALzol3dN");
+            textBox1.Text = "Connected to database";
         }
 
         private void Form3_Load(object sender, EventArgs e)
