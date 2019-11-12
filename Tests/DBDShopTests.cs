@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DBDShopLib;
 using System.Collections.Generic;
 
+
 namespace Tests
 {
     [TestClass]
@@ -14,7 +15,7 @@ namespace Tests
             //Connect to the test database
             Client client= new Client("NW0HSO5HO7", "NW0HSO5HO7", "ZEALzol3dN");
             //Get all the existing products
-            List<Product> products = client.GetProducts();
+            List<Producto> products = client.GetProducts();
             //Delete all the products
             client.DeleteProducts(products);
             //Check we deleted all the products
@@ -45,7 +46,7 @@ namespace Tests
 			//Connect to the test database
 			Client client = new Client("NW0HSO5HO7", "NW0HSO5HO7", "ZEALzol3dN");
 			//Get all the existing products
-			List<Product> products = client.GetProducts();
+			List<Producto> products = client.GetProducts();
 			//Delete all the products
 			client.DeleteProducts(products);
 			//Insert a product
@@ -99,7 +100,7 @@ namespace Tests
 
 			//Check if were correctly modify
 			// Get product from BD
-			string query = "SELECT precio FROM producto_pedido WHERE producto = 23 AND pedido = 12";
+			query = "SELECT precio FROM producto_pedido WHERE producto = 23 AND pedido = 12";
 			MySqlCommand cmd = new MySqlCommand(query, m_connection);
 			MySqlDataReader reader = cmd.ExecuteReader();
 			while (reader.Read())
@@ -112,7 +113,7 @@ namespace Tests
 			reader.Close();
 
 			//Delete test product
-			string query = "DELETE FROM producto_pedido WHERE producto=23 AND pedido=12";
+			query = "DELETE FROM producto_pedido WHERE producto=23 AND pedido=12";
 			MySqlCommand cmd = new MySqlCommand(query, m_connection);
 			cmd.ExecuteNonQuery();
 

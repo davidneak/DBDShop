@@ -123,14 +123,15 @@ namespace DBDShopLib
             }
         }
 
-        public List<Producto> getPurchases()
+        public List<Purchase> getPurchases()
         {
-            //WIP
             int precio = 0;
             string fecha = "";
             int producto = 0;
             int cantidad = 0;
             string query = "SELECT * FROM compras;";
+            List<Purchase> compras = new List<Purchase>();
+            Purchase buffer;
             MySqlCommand cmd = new MySqlCommand(query, m_connection);
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -139,10 +140,11 @@ namespace DBDShopLib
                 fecha = reader.GetValue(1).ToString();
                 producto = int.Parse(reader.GetValue(2).ToString());
                 cantidad = int.Parse(reader.GetValue(3).ToString());
-
+                buffer = new Purchase(precio, fecha, producto, cantidad);
+                compras.Add(buffer);
             }
             reader.Close();
-            return new List<Producto>();
+            return compras;
         }
 
         public List<Sale> GetSales()
