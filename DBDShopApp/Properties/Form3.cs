@@ -1,4 +1,4 @@
-﻿using DBDShopLib;
+using DBDShopLib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,27 +35,30 @@ namespace DBDShopApp.Properties
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-
+            
             string precio = "", id = "";
        
             int i = 0;
 
-            while (i < textBox1.Text.Length)
-            {
-                if(char.IsDigit(textBox1.Text[i]))
+            
+                while (char.IsDigit(textBox1.Text[i]))
+                {
                     precio += textBox1.Text[i];
-               
-
-            }
-
+                    i++;
+                }
+                
+                if (!char.IsDigit(textBox1.Text[i]))
+                {
+                    i++;
+                }
+                while (i < textBox1.Text.Length && char.IsDigit(textBox1.Text[i]))
+                {
+                    id += textBox1.Text[i];
+                    i++;
+                }
               
-
-
-
-
             double p = double.Parse(precio);
-           // int cod = int.Parse(id);
+            int cod = int.Parse(id);
 
             c.modificarPrecio(p, cod);
 
