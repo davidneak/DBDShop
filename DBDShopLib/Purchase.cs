@@ -10,9 +10,9 @@ namespace DBDShopLib
     {
         int idProd;
         string fecha;
-        int precio;
+        float precio;
         int cantidad;
-        public Purchase(int id, string date, int price, int ammount)
+        public Purchase(int id, string date, float price, int ammount)
         {
             idProd = id;
             fecha = date;

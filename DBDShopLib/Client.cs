@@ -10,17 +10,28 @@ namespace DBDShopLib
 {
     public class Client
     {
-        MySqlConnection m_connection = null;
-
+        public MySqlConnection m_connection = null;
+        public Boolean con;
         public Client(string databasename, string username, string password, string server= "remotemysql.com")
         {
-            m_connection = new MySqlConnection();
-            m_connection.ConnectionString =
-            "Server=" + server + ";" +
-            "database=" + databasename + ";" +
-            "UID=" + username + ";" +
-            "password=" + password + ";";
-            m_connection.Open();
+            try
+            {
+                m_connection = new MySqlConnection();
+                m_connection.ConnectionString =
+                "Server=" + server + ";" +
+                "database=" + databasename + ";" +
+                "UID=" + username + ";" +
+                "password=" + password + ";";
+                m_connection.Open();
+                con = true;
+            }catch(MySqlException)
+            {
+                con = false;
+            }
+        }
+        public Boolean checkConnection()
+        {
+            return con;
         }
 
         public void InsertTestData()
@@ -75,11 +86,21 @@ namespace DBDShopLib
             cmd.ExecuteNonQuery();
         }
 
-        public void DeleteProducts(List<Producto> products)
+        public void DeleteProducts(int[] ids)
         {
-            foreach(Producto product in products)
+            for(int i=0; i<ids.Length; i++)
             {
-                string query = "DELETE FROM producto WHERE Id =" + product.idproducto + ";";
+                string query = "DELETE FROM producto WHERE Id =" + ids[i] + ";";
+                MySqlCommand cmd = new MySqlCommand(query, m_connection);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteProducts(List<Producto> productos)
+        {
+            foreach(Producto producto in productos)
+            {
+                string query = "DELETE FROM producto WHERE Id =" + producto.idproducto + ";";
                 MySqlCommand cmd = new MySqlCommand(query, m_connection);
                 cmd.ExecuteNonQuery();
             }
@@ -92,13 +113,16 @@ namespace DBDShopLib
             cmd.ExecuteNonQuery();
         }
 
-        public void buyProduct(int product, int ammount, string source)
+        public void buyProduct(int product, int ammount, int source, int pedido)
         {
 
             string query = "INSERT INTO compras VALUES(SELECT precio from producto_distribuidor WHERE codproducto = " + product + "AND iddistribuidor = " + source + ",NOW()," + product + "," + ammount + ");";
             MySqlCommand cmd = new MySqlCommand(query, m_connection);
             cmd.ExecuteNonQuery();
             query = "UPDATE producto SET stock = stock + " + ammount + " WHERE idproducto = " + product + ");";
+            cmd = new MySqlCommand(query, m_connection);
+            cmd.ExecuteNonQuery();
+            query = "INSERT INTO producto_pedido VALUES (" + product +", 12, "+ ammount + ", (SELECT precio from producto_distribuidor WHERE codproducto = " + product + "AND iddistribuidor = " + source + "))";
             cmd = new MySqlCommand(query, m_connection);
             cmd.ExecuteNonQuery();
         }
@@ -125,7 +149,7 @@ namespace DBDShopLib
 
         public List<Purchase> getPurchases()
         {
-            int precio = 0;
+            float precio = 0;
             string fecha = "";
             int producto = 0;
             int cantidad = 0;
@@ -136,11 +160,11 @@ namespace DBDShopLib
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                precio = int.Parse(reader.GetValue(0).ToString());
+                precio = float.Parse(reader.GetValue(0).ToString());
                 fecha = reader.GetValue(1).ToString();
                 producto = int.Parse(reader.GetValue(2).ToString());
                 cantidad = int.Parse(reader.GetValue(3).ToString());
-                buffer = new Purchase(precio, fecha, producto, cantidad);
+                buffer = new Purchase(producto, fecha, precio, cantidad);
                 compras.Add(buffer);
             }
             reader.Close();
